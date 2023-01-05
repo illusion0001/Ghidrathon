@@ -12,35 +12,35 @@ jobs:
       matrix:
         ghidra: ['latest', '10.2']
         gradle-version: ['7.3']
-
     steps:
+
     - name: Checkout
       uses: actions/checkout@v3
 
     - name: Build jep
       run: pip install jep
 
-      - name: Set Ghidra version
-        id: ghidra_version
-        run: |
-          if [ ${{ matrix.ghidra }} = latest ]; then
+    - name: Set Ghidra version
+      id: ghidra_version
+      run: |
+        if [ ${{ matrix.ghidra }} = latest ]; then
             ghidra_version=$(curl -fLsSo /dev/null -w %{url_effective} https://github.com/NationalSecurityAgency/ghidra/releases/latest |
-             grep -oP '(?<=https://github.com/NationalSecurityAgency/ghidra/releases/tag/Ghidra_).+(?=_build)')
+            grep -oP '(?<=https://github.com/NationalSecurityAgency/ghidra/releases/tag/Ghidra_).+(?=_build)')
             echo "::set-output name=full::$ghidra_version"
-          else
+        else
             echo "::set-output name=full::${{ matrix.ghidra }}"
-          fi
+        fi
 
-      - name: Checkout GhidraOrbis
-        uses: actions/checkout@v3
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: temurin
-          java-version: 17
-      - name: Get short SHA
-        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
-      - name: Setup Ghidra
-        uses: er28-0652/setup-ghidra@master
-        with:
-          version: ${{ steps.ghidra_version.outputs.full }}
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 17
+
+    - name: Get short SHA
+      run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+    - name: Setup Ghidra
+      uses: er28-0652/setup-ghidra@master
+      with:
+        version: ${{ steps.ghidra_version.outputs.full }}
