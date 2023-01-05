@@ -48,7 +48,7 @@ jobs:
         build-root-directory: .
         arguments: -PGHIDRA_INSTALL_DIR=${{ env.GHIDRA_INSTALL_DIR }}
 
-    - name: Upload GhidraOrbis Artifact
+    - name: Upload Ghidrathon Artifact
       uses: actions/upload-artifact@v3
       with:
         path: dist/*.zip
