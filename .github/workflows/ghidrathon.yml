@@ -43,3 +43,6 @@ jobs:
       uses: er28-0652/setup-ghidra@master
       with:
         version: ${{ env.ghidra_version }}
+
+    - name: Build
+      run: gradle # -PGHIDRA_INSTALL_DIR=<absolute path to Ghidra install>
