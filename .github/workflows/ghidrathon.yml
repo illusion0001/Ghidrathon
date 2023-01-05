@@ -42,7 +42,7 @@ jobs:
         java-version: 17
 
     - name: Build Ghidrathon
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@main
       with:
         gradle-version: ${{ matrix.gradle-version }}
         build-root-directory: .
@@ -51,7 +51,7 @@ jobs:
     - name: Upload GhidraOrbis Artifact
       uses: actions/upload-artifact@v3
       with:
-       path: dist/*.zip
+        path: dist/*.zip
         if-no-files-found: error
         retention-days: 14
 
