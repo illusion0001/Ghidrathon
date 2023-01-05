@@ -44,5 +44,13 @@ jobs:
     - name: Get short SHA
       run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
-    - name: Build
-      run: gradle -PGHIDRA_INSTALL_DIR=${{ env.GHIDRA_INSTALL_DIR }} && ls -R
+
+    - name: Build Ghidrathon
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: ${{ matrix.gradle-version }}
+        build-root-directory: .
+        arguments: -PGHIDRA_INSTALL_DIR=${{ env.GHIDRA_INSTALL_DIR }}
+
+    - name: test
+      run: ls -R
