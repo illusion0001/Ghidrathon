@@ -41,10 +41,6 @@ jobs:
         distribution: temurin
         java-version: 17
 
-    - name: Get short SHA
-      run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
-
-
     - name: Build Ghidrathon
       uses: gradle/gradle-build-action@v2
       with:
@@ -52,5 +48,21 @@ jobs:
         build-root-directory: .
         arguments: -PGHIDRA_INSTALL_DIR=${{ env.GHIDRA_INSTALL_DIR }}
 
-    - name: test
-      run: ls -R
+    - name: Upload GhidraOrbis Artifact
+      uses: actions/upload-artifact@v3
+      with:
+       path: dist/*.zip
+        if-no-files-found: error
+        retention-days: 14
+
+push_release:
+  needs: build_extensions
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v3
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+    - name: Create Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh release create 1.0${{ GITHUB.RUN_NUMBER }} artifact/*.zip --target ${{ GITHUB.SHA }} -t 1.0${{ GITHUB.RUN_NUMBER }}
